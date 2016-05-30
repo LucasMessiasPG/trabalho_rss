@@ -12,7 +12,7 @@
     <li>Laravel 5.2</li>
     <li>AngularJS 2 (RC1)</li>
     <li>PostgreSQL 9.5.1</li>
-<ul>
+</ul>
 
 ## Licence
 
