@@ -1,0 +1,11 @@
+.font-red{
+    color: red;
+}
+
+.no-resize{
+    resize: none;
+}
+
+a{
+    cursor: pointer !important;
+}
