@@ -11,4 +11,23 @@ use Illuminate\Foundation\Auth\Access\AuthorizesResources;
 class Controller extends BaseController
 {
     use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests;
+	
+	public function _return($status , $message , $json){
+		if($status == 'success' || $status == true) {
+			if ($json != null)
+				return ['status' => 'success', 'msg' => $message, 'json' => $json];
+			else
+				return ['status' => 'success', 'msg' => $message];
+		}elseif($status == 'error' || $status == false){
+			if ($json != null)
+				return ['status' => 'error', 'msg' => $message, 'erro' => [$json->getMessage(),$json->getLine(),$json->getFile()]];
+			else
+				return ['status' => 'error', 'msg' => $message];
+		}else{
+			if ($json != null)
+				return ['status' => $status, 'msg' => $message, 'json' => $json];
+			else
+				return ['status' => $status, 'msg' => $message];
+		}
+	}
 }
