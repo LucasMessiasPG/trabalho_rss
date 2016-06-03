@@ -1,8 +1,11 @@
 import {Component} from '@angular/core';
 @Component({
     template:`
-    <input type="text" placeholder="Pesquisar">
-    <button>Pesquisar</button>
+    <button (click)="upload()">Upload File</button>
     `
 })
-export class UploadComponent{}
+export class UploadComponent{
+    upload(){
+        console.log(1)
+    }
+}
