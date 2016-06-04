@@ -7,6 +7,10 @@
  * @author   Taylor Otwell <taylorotwell@gmail.com>
  */
 
+header('Access-Control-Allow-Origin: http://localhost:3000',true);
+header('Access-Control-Allow-Methods: GET, POST, PUT',true);
+header('Access-Control-Allow-Headers: Content-Type',true);
+
 /*
 |--------------------------------------------------------------------------
 | Register The Auto Loader

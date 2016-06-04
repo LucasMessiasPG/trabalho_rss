@@ -2,6 +2,10 @@
     color: red;
 }
 
+.font-green{
+    color: greenyellow;
+}
+
 .no-resize{
     resize: none;
 }

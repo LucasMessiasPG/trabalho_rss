@@ -14,9 +14,9 @@ class RSS extends Migration
     {
         Schema::create('portal', function (Blueprint $table) {
             $table->increments('id_portal');
-            $table->string('nome_portal');
-            $table->string('site');
-            $table->string('email');
+            $table->string('nome_portal')->nullable();
+            $table->string('site')->nullable();
+            $table->string('email')->nullable();
             $table->timestamps();
         });
 
