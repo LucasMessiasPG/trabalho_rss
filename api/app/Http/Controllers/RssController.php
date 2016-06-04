@@ -22,10 +22,10 @@ class RssController extends Controller
 			/**
 			 * @var Portal $portal
 			 */
-			$portal = Portal::
-				firstOrCreate([
-					'nome_portal' => $feed->get_title(),
-					'site' => $feed->get_link()
+			$portal = Portal::firstOrCreate([
+				'nome_portal' => $feed->get_title(),
+				'site' => $feed->get_link(),
+				'email' => $feed->get_author()
 				]);
 			
 			/**
