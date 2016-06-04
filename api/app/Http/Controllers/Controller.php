@@ -12,7 +12,7 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, AuthorizesResources, DispatchesJobs, ValidatesRequests;
 	
-	public function _return($status , $message , $json){
+	public function _return($status , $message , $json = null){
 		if($status == 'success' || $status == true) {
 			if ($json != null)
 				return ['status' => 'success', 'msg' => $message, 'json' => $json];
