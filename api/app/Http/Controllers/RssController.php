@@ -2,19 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\Request;
 use App\Noticia;
 use App\Portal;
+use Illuminate\Http\Request;
 
 class RssController extends Controller
 {
-	public function import()
+	public function import(Request $request)
 	{
 		try{
 			/**
 			 * @var \SimplePie $feed
 			 */
-			$feed = \Feeds::make('http://rss.uol.com.br/feed/noticias.xml');
+			$feed = \Feeds::make($request->get('url_xml'));
 			
 			//todos os itens
 			$items = $feed->get_items();
