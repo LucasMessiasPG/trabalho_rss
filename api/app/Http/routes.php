@@ -11,6 +11,9 @@
 |
 */
 
+Route::any('/', function () {
+	return "API trabalho RSS.";
+});
 Route::group(['prefix'=>'portal'],function(){
 	Route::post('create','PortalController@store');
 	Route::post('update','PortalController@update');
@@ -35,4 +38,7 @@ Route::group(['prefix'=>'rss'],function(){
 	Route::post('import','RssController@import');
 	Route::post('export','RssController@export');
 	Route::post('filter','RssController@filter');
+	Route::get('validation_xml', function () {
+		return view('schema');
+	});
 });
