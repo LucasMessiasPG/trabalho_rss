@@ -2,6 +2,10 @@ import {Component,Inject} from '@angular/core';
 import {Http,Headers} from '@angular/http';
 import {RssSingleComponent} from "./rss-single.component";
 declare var $: any;
+
+/**
+ * Template para pesquisar
+ */
 @Component({
     template:`
     <label for="pesquisar">Palavra Chave</label>
@@ -18,9 +22,23 @@ declare var $: any;
     `,
     directives:[RssSingleComponent]
 })
+
+/**
+ * Controller para pesquisar
+ */
 export class PesquisarComponent{
+    /**
+     * termo da pesquisa
+     */
     private termo;
+    /**
+     * Lista de RSS da pesquisa
+     */
     private posts;
+    /**
+     * Mensagem de falha
+     * @type {string}
+     */
     private msg = '';
 
     constructor(@Inject(Http) private _http:Http){}
@@ -36,6 +54,9 @@ export class PesquisarComponent{
             .toPromise()
             .then(res => {
                 let posts = res.json()
+                /**
+                 * verifica se a requisicao veio com status 'success'
+                 */
                 if(posts.status == 'success') {
                     if (posts.json) {
                         this.posts = posts.json

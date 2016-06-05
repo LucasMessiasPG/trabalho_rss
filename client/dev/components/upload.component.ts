@@ -1,5 +1,9 @@
 import {Component} from '@angular/core';
 import {FILE_UPLOAD_DIRECTIVES, FileUploader} from 'ng2-file-upload/ng2-file-upload'
+
+/**
+ * Layout para Upload
+ */
 @Component({
     template:`
     <div class="grid">
@@ -29,16 +33,46 @@ import {FILE_UPLOAD_DIRECTIVES, FileUploader} from 'ng2-file-upload/ng2-file-upl
     `,
     directives:[FILE_UPLOAD_DIRECTIVES]
 })
+
+/**
+ * Controller para Upload
+ */
 export class UploadComponent{
+    /**
+     * Url de integração com BACKEND
+     * @type {string}
+     * @private
+     */
     private _url = 'http://localhost:8000/rss/import';
+    /**
+     * Instancia a biblioteca para fazer upload
+     * @type {FileUploader}
+     */
     public uploader:FileUploader = new FileUploader({url:this._url});
 
+    /**
+     * faz um requisição XHR para enviar o xml
+     * @param item
+     */
     enviar(item){
+        /**
+         * desativa as credenciais no backend
+         * caso true nescessario enviar Authorization no header
+         * @type {boolean}
+         */
         item.withCredentials = false;
         if(item.file.type == 'text/xml') {
             item.upload()
+            /**
+             * Mostra para o usuario que seu envio foi feito
+             * @type {boolean}
+             */
             item.fail = false;
         }else{
+            /**
+             * Mosta para o usuario que seu aquivo nao é valido para envio
+             * @type {boolean}
+             */
             item.fail = true;
         }
     }

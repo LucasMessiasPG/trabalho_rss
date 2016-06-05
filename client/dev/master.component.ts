@@ -8,6 +8,10 @@ import {DownloadComponet} from "./components/download.component";
 import {UploadComponent} from "./components/upload.component";
 import {ListarComponent} from "./components/listar.component";
 
+
+/**
+ * Layout inicial
+ */
 @Component({
     selector: 'app',
     template: `
@@ -20,6 +24,9 @@ import {ListarComponent} from "./components/listar.component";
     directives:[NavBarComponent,ROUTER_DIRECTIVES]
 })
 
+/**
+ * Configuração das rotas
+ */
 @RouteConfig([
     {path:'/', name:'Home', component:HomeComponent,useAsDefault: true},
     {path:'/rss', name:'Rss', component:InsertRssComponent},
@@ -29,4 +36,7 @@ import {ListarComponent} from "./components/listar.component";
     {path:'/pesquisar', name:'Pesquisar', component:PesquisarComponent},
 ])
 
+/**
+ * Controller Master
+ */
 export class MasterComponent { }

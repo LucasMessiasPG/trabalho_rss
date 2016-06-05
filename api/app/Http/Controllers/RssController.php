@@ -189,7 +189,9 @@ class RssController extends Controller
 				}
 
 			}
-			return $this->_return(true, 'Filtro efetuado', $noticias->get()->toArray());
+			$noticias->leftJoin('imagens','imagens.id_noticia','=','noticia.id_noticia');
+			$result_noticias = $noticias->get()->toArray();
+			return $this->_return(true, 'Filtro efetuado', $result_noticias);
 		}catch (\Exception $e){
 		    return $this->_return(false,'Erro ao filtrar rss',$e);
 		}
