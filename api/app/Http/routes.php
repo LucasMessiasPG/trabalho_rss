@@ -15,6 +15,7 @@ Route::any('/', function () {
 	return "API trabalho RSS.";
 });
 Route::group(['prefix'=>'portal'],function(){
+	Route::post('filter','PortalController@filter');
 	Route::post('create','PortalController@store');
 	Route::post('update','PortalController@update');
 	Route::post('delete','PortalController@destroy');
@@ -25,6 +26,7 @@ Route::group(['prefix'=>'noticia'],function(){
 	Route::post('delete','NoticiaController@destroy');
 });
 Route::group(['prefix'=>'comentario'],function(){
+	Route::get('get/{id_noticia}','ComentarioController@get');
 	Route::post('create','ComentarioController@store');
 	Route::post('update','ComentarioController@update');
 	Route::post('delete','ComentarioController@destroy');

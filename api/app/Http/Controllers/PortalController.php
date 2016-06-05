@@ -7,6 +7,37 @@ use App\Portal;
 
 class PortalController extends Controller
 {
+	public function filter(Request $request)
+	{
+		try{
+
+			$campos = [
+				'nome_portal',
+				'site',
+				'email',
+				'id_portal'
+			];
+
+			$ilike = ['nome_portal','site','email'];
+			$portals = Portal::orderBy('nome_portal');
+
+			foreach ($request->only($campos) as $field => $value) {
+				if(!empty($value)){
+					if(in_array($field,$ilike)){
+						$portals->where($field,'ilike',$value);
+					}else{
+						$portals->where($field,'=',$value);
+					}
+				}
+
+			}
+
+			return $this->_return(true,'Portal filtrado',$portals->get()->toArray());
+		}catch(\Exception $e){
+			return $this->_return(false,'Erro ao filtrar portal',$e);
+		}
+	}
+
 	public function store(Request $request)
 	{
 		try{
@@ -14,9 +45,9 @@ class PortalController extends Controller
 			
 			$portal = Portal::create($request->all());
 			
-			$this->_return(true,'Portal inserido',$portal);
+			return $this->_return(true,'Portal inserido',$portal);
 		}catch (\Exception $e){
-			$this->_return(false,'Erro ao inserir portal',$e);
+			return $this->_return(false,'Erro ao inserir portal',$e);
 		}
 	}
 	
@@ -26,10 +57,10 @@ class PortalController extends Controller
 		            
 		  $portal = Portal::find($request->id_portal);
 			$portal->update($request->all());
-			
-			$this->_return(true,'Portal alterado');
+
+			return $this->_return(true,'Portal alterado');
 		}catch (\Exception $e){
-			$this->_return(false,'Erro ao alterar portal');
+			return $this->_return(false,'Erro ao alterar portal');
 		}
 	}
 	public function destroy(Request $request)
@@ -38,10 +69,10 @@ class PortalController extends Controller
 		            
 		  $portal = Portal::find($request->id_portal);
 			$portal->delete();
-			
-			$this->_return(true,'Portal excluido');
+
+			return $this->_return(true,'Portal excluido');
 		}catch (\Exception $e){
-			$this->_return(false,'Erro ao excluir portal');
+			return $this->_return(false,'Erro ao excluir portal');
 		}
 	}
 }

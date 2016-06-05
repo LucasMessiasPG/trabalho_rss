@@ -68,31 +68,33 @@ class RssController extends Controller
 	public function filter(Request $request)
 	{
 		try{
-		            
 		    // filter rss
 			$campos = [
 				'noticia',
 				'titulo',
 				'email',
 				'link',
-				'data'
+				'data',
+				'pesquisa'
 			];
 
 			$noticias = Noticia::orderBy('data');
 			$ilike = ['noticia','titulo','email','link'];
 			foreach ($request->only($campos) as $field => $value) {
 				if(!empty($value)){
-					return in_array($field,$ilike);
 					if(in_array($field,$ilike)){
 						$noticias->where($field,'ilike','%'.$value.'%');
 					}elseif($field == 'data'){
 						$noticias->where($field,'=',$value);
+					}else{
+						$noticias->where('titulo','ilike','%'.$value.'%')
+							->orWhere('conteudo','ilike','%'.$value.'%')
+							->orWhere('link','ilike','%'.$value.'%');
 					}
 				}
-				
-			}
 
-			return $this->_return(true,'Filtro efetuado',$noticias->get()->toArray());
+			}
+			return $this->_return(true, 'Filtro efetuado', $noticias->get()->toArray());
 		}catch (\Exception $e){
 		    return $this->_return(false,'Erro ao filtrar rss',$e);
 		}

@@ -3,7 +3,7 @@ import {NavBarComponent} from "./components/nav_bar.component";
 import {HomeComponent} from "./components/home.component";
 import { RouteConfig, ROUTER_DIRECTIVES } from '@angular/router-deprecated';
 import {InsertRssComponent} from "./components/insert_rss.component";
-import {PesquisarComponent} from "./components/procurar.component";
+import {PesquisarComponent} from "./components/pesquisar.component";
 import {DownloadComponet} from "./components/download.component";
 import {UploadComponent} from "./components/upload.component";
 import {ListarComponent} from "./components/listar.component";

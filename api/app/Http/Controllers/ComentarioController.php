@@ -3,10 +3,27 @@
 namespace App\Http\Controllers;
 
 use App\Comentario;
-use App\Http\Requests\Request;
+use Illuminate\Http\Request;
 
 class ComentarioController extends Controller
 {
+
+	public function get($id_noticia)
+	{
+		try{
+
+			$comentarios = Comentario::where('id_noticia','=',$id_noticia)
+				->orderBy('created_at','desc')
+				->take(10)
+				->get()
+				->toArray();
+
+			return $this->_return(true,'Comentarios coletados',$comentarios);
+		}catch (\Exception $e){
+			return $this->_return(false,'Erro ao pegar comentarios',$e);
+		}
+	}
+
 	public function store(Request $request)
 	{
 		try{
@@ -14,9 +31,9 @@ class ComentarioController extends Controller
 			
 			$portal = Comentario::create($request->all());
 			
-			$this->_return(true,'Comentario inserido',$portal);
+			return $this->_return(true,'Comentario inserido',$portal);
 		}catch (\Exception $e){
-			$this->_return(false,'Erro ao inserir comentario',$e);
+			return $this->_return(false,'Erro ao inserir comentario',$e);
 		}
 	}
 	
@@ -26,10 +43,10 @@ class ComentarioController extends Controller
 		            
 		  $portal = Comentario::find($request->id_portal);
 			$portal->update($request->all());
-			
-			$this->_return(true,'Comentario alterado');
+
+			return $this->_return(true,'Comentario alterado');
 		}catch (\Exception $e){
-			$this->_return(false,'Erro ao alterar comentario');
+			return $this->_return(false,'Erro ao alterar comentario');
 		}
 	}
 	public function destroy(Request $request)
@@ -38,10 +55,10 @@ class ComentarioController extends Controller
 		            
 		  $portal = Comentario::find($request->id_portal);
 			$portal->delete();
-			
-			$this->_return(true,'Comentario excluido');
+
+			return $this->_return(true,'Comentario excluido');
 		}catch (\Exception $e){
-			$this->_return(false,'Erro ao excluir comentario');
+			return $this->_return(false,'Erro ao excluir comentario');
 		}
 	}
 }

@@ -1,13 +1,13 @@
-import { Component,Inject } from '@angular/core'
-import { Http,Headers } from '@angular/http'
-import {InsertRssComponent} from "./insert_rss.component";
+import {Component,Inject} from '@angular/core';
+import {Http,Headers} from '@angular/http';
 import {RssSingleComponent} from "./rss-single.component";
-import 'rxjs/add/operator/toPromise';
 declare var $: any;
-
 @Component({
     template:`
-    <div class="col_12">
+    <label for="pesquisar">Palavra Chave</label>
+    <input type="text" id="pesquisar" [(ngModel)]="termo">
+    <button (click)="pesquisar(termo)">Pesquisar</button>
+    <div>
         <ul class="icons">
             <li *ngFor="let post of posts">
                 <rss-single [rss]="post"></rss-single>
@@ -15,19 +15,20 @@ declare var $: any;
         </ul>
     </div>
     `,
-    directives:[InsertRssComponent,RssSingleComponent]
+    directives:[RssSingleComponent]
 })
-export class HomeComponent{
-    private posts:Array<any> = [];
+export class PesquisarComponent{
+    private termo;
+    private posts;
 
     constructor(@Inject(Http) private _http:Http){}
-
-    ngOnInit(){
+    
+    pesquisar(termo){
         let headers = new Headers();
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
 
 
-        let filter = {};
+        let filter = {pesquisa:termo};
         let body = $.param(filter);
         this._http.post('http://localhost:8000/rss/filter',body,{headers:headers})
             .toPromise()
@@ -37,4 +38,3 @@ export class HomeComponent{
             })
     }
 }
-
