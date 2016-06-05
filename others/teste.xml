@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<rss version="2.0" xmlns="http://localhost/trabalho_rss/api/public/rss/validation_xml">
+<rss version="2.0">
     <channel>
         <title>Teste XML</title>
         <link>http://link.com/teste/</link>

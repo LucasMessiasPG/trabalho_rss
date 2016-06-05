@@ -63,6 +63,16 @@ class RssController extends Controller
 			 */
 			$arquivo = $request->file('file');
 
+			/**
+			 * Validação do XML
+			 */
+			$xml = new \DOMDocument();
+			$xml->load($arquivo);
+
+			if (!$xml->schemaValidate('validacao.xsd')) {
+				return $this->_return(false, libxml_display_errors());
+			}
+
 			if(!preg_match('/xml/', $arquivo->getMimeType()))
 				return $this->_return(false, "arquivo inválido");
 
