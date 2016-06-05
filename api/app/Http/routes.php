@@ -12,7 +12,7 @@
 */
 
 Route::any('/', function () {
-	return "API trabalho RSS.";
+	return view('documentacao');
 });
 Route::group(['prefix'=>'portal'],function(){
 	Route::post('filter','PortalController@filter');

@@ -1,5 +1,8 @@
 import { Component } from '@angular/core'
 import { ROUTER_DIRECTIVES } from '@angular/router-deprecated'
+/**
+ * Template dos menus
+ */
 @Component({
     selector:'nav-bar',
     template:`

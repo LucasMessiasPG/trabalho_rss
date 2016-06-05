@@ -5,6 +5,9 @@ import {RssSingleComponent} from "./rss-single.component";
 import 'rxjs/add/operator/toPromise';
 declare var $: any;
 
+/**
+ * Layout para Home
+ */
 @Component({
     template:`
     <div class="col_12">
@@ -18,12 +21,27 @@ declare var $: any;
     `,
     directives:[InsertRssComponent,RssSingleComponent]
 })
+
+/**
+ * Controller para Home
+ */
 export class HomeComponent{
+    /**
+     * Array de Rss que será preemchido pelo backend
+     * @type {Array}
+     */
     private posts:Array<any> = [];
+    /**
+     * Mensagem de falha 
+     * @type {string}
+     */
     private msg = '';
 
     constructor(@Inject(Http) private _http:Http){}
 
+    /**
+     * Carrega os Rss para Home
+     */
     ngOnInit(){
         let headers = new Headers();
         headers.append('Content-Type', 'application/x-www-form-urlencoded');
@@ -31,12 +49,22 @@ export class HomeComponent{
 
         let filter = {};
         let body = $.param(filter);
+        /**
+         * Solicita via XHR os RSS para o BACKEND
+         */
         this._http.post('http://localhost:8000/rss/filter',body,{headers:headers})
             .toPromise()
             .then(res => {
-                let posts = res.json().json
-                if(posts.length > 0) {
-                    this.posts = posts
+                /**
+                 * filtra para json
+                 */
+                let posts = res.json()
+
+                /**
+                 * verifica se o filtro solicitado possui rss que esta dentro de json
+                 */
+                if(posts.json) {
+                    this.posts = posts.json
                     this.msg = '';
                 }else {
                     this.posts = []
