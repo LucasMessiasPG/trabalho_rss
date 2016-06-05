@@ -24,7 +24,7 @@ class RssController extends Controller
 		/**
 		 * Define uma cache
 		 */
-		$feed->setCache(60);
+		//$feed->setCache(60);
 		
 		// check if there is cached feed and build new only if is not
 		if (!$feed->isCached())
@@ -52,17 +52,19 @@ class RssController extends Controller
 
 			foreach ($noticias as $noticia) {
 				$feed->add(
-					$noticia->titulo,
+					$this->cdata($noticia->titulo),
 					$noticia->email,
 					$noticia->link,
 					$noticia->created_at,
-					$noticia->conteudo
+					$this->cdata($noticia->conteudo)
 				);
 			}
 			
 		}
+
+		$feed->ctype = "text/xml";
 		
-		return $feed->render('text/xml');
+		return $feed->render('rss');
 	}
 
 	public function import(Request $request)
@@ -160,7 +162,8 @@ class RssController extends Controller
 	 * @param $rss_time
 	 * @return int
 	 */
-	private function rsstotime($rss_time) {
+	private function rsstotime($rss_time)
+	{
 		$day = substr($rss_time, 5, 2);
 		$month = substr($rss_time, 8, 3);
 		$month = date('m', strtotime("$month 1 2011"));
@@ -189,5 +192,10 @@ class RssController extends Controller
 		}
 
 		return $timestamp;
+	}
+
+	private function cdata($text = '')
+	{
+		return '<![CDATA[' . $text . ']]>';
 	}
 }
