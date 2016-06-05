@@ -21,7 +21,7 @@
     <li><p>Dentro de 'api' renomeie o aquivo .env.example para .env (caso seja em linux este aquivo pode estar oculto)</p></li>
     <li>
     <p>Abra o aquivo .env e altere as conifgurações do banco para o seu banco de prefrencia</p>
-    '''
+    ```
         // Escolha um dos 3 bancos
         DB_CONNECTION= pgsql | mysql | sqllite
         DB_PORT= *****
@@ -29,25 +29,25 @@
         DB_DATABASE= *****
         DB_USERNAME= *****
         DB_PASSWORD= *****
-    '''
+    ```
     </li>
     <li>
     <p>Eexecute este comando (caso nao possua composer <a href="https://getcomposer.org/">click aqui</a></p>
-    '''
+    ```
         $cd /path/to/api
         $composer install
-    '''
+    ```
    </li>
    <li>
    <p>Dentro da pasta 'cliente' execute os seguintes comandos (é necessario tem node instalado para instalar <a href="https://nodejs.org/en/">click aqui</a>)</p>
-   '''
+   ```
         $cd /path/to/client
         $npm install
-   '''
+   ```
    </li>
    <li>
    <p>Por ultimo para iniciar</p>
-   '''        
+   ```
         // para iniciar o server
         $cd /path/to/api
         $php artisan server
@@ -55,7 +55,7 @@
         // para iniciar o cliente
         $cd /path/to/client
         $npm start
-   '''
+   ```
    </li>
 </ol>
 
