@@ -8,17 +8,19 @@ declare var $: any;
 @Component({
     template:`
     <div class="col_12">
-        <ul class="icons">
+        <ul *ngIf="(posts && posts.length > 0)" class="icons">
             <li *ngFor="let post of posts">
                 <rss-single [rss]="post"></rss-single>
             </li>
         </ul>
+        <p class="font-red">{{ msg }}</p>
     </div>
     `,
     directives:[InsertRssComponent,RssSingleComponent]
 })
 export class HomeComponent{
     private posts:Array<any> = [];
+    private msg = '';
 
     constructor(@Inject(Http) private _http:Http){}
 
@@ -33,7 +35,13 @@ export class HomeComponent{
             .toPromise()
             .then(res => {
                 let posts = res.json().json
-                this.posts = posts
+                if(posts.length > 0) {
+                    this.posts = posts
+                    this.msg = '';
+                }else {
+                    this.posts = []
+                    this.msg = 'Não foi encontrado nem um RSS, Por favor insira novos RSS'
+                }
             })
     }
 }

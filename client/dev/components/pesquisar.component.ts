@@ -8,11 +8,12 @@ declare var $: any;
     <input type="text" id="pesquisar" [(ngModel)]="termo">
     <button (click)="pesquisar(termo)">Pesquisar</button>
     <div>
-        <ul class="icons">
+        <ul *ngIf="(posts && posts.length > 0)" class="icons">
             <li *ngFor="let post of posts">
                 <rss-single [rss]="post"></rss-single>
             </li>
         </ul>
+        <p class="font-red">{{ msg }}</p>
     </div>
     `,
     directives:[RssSingleComponent]
@@ -20,6 +21,7 @@ declare var $: any;
 export class PesquisarComponent{
     private termo;
     private posts;
+    private msg = '';
 
     constructor(@Inject(Http) private _http:Http){}
     
@@ -33,8 +35,18 @@ export class PesquisarComponent{
         this._http.post('http://localhost:8000/rss/filter',body,{headers:headers})
             .toPromise()
             .then(res => {
-                let posts = res.json().json
-                this.posts = posts
+                let posts = res.json()
+                if(posts.status == 'success') {
+                    if (posts.json) {
+                        this.posts = posts.json
+                        this.msg = '';
+                    } else {
+                        this.posts = []
+                        this.msg = 'Não foi encontrado nem um RSS com esses parametros'
+                    }
+                }else{
+                    this.msg = posts.error
+                }
             })
     }
 }

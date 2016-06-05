@@ -36,6 +36,8 @@
     <pre>
         $cd /path/to/api
         $composer install
+        // após a instalação
+        $php artisan migrate // isso criará as tableas nescessarias
     </pre>
    </li>
    <li>
