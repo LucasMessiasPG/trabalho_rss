@@ -47,11 +47,7 @@
    </li>
    <li>
    <p>Por ultimo para iniciar</p>
-   '''
-        // para pular o banco 
-        $cd /path/to/api
-        $php artisan migrate
-        
+   '''        
         // para iniciar o server
         $cd /path/to/api
         $php artisan server
