@@ -14,6 +14,7 @@ declare var $: any;
                 <rss-single [rss]="post"></rss-single>
             </li>
         </ul>
+        <p class="font-red">{{ msg }}</p>
     </div>
     `,
     directives:[RssSingleComponent]
@@ -35,12 +36,28 @@ export class DownloadComponet{
         this._http.post('http://localhost:8000/rss/filter',body,{headers:headers})
             .toPromise()
             .then(res => {
-                let posts = res.json().json
-                this.posts = posts
+                let posts = res.json()
+                if(posts.status == 'success') {
+                    if (posts.json) {
+                        this.posts = posts.json
+                        this.msg = '';
+                    } else {
+                        this.posts = []
+                        this.msg = 'Não foi encontrado nenhum RSS com esses parametros'
+                    }
+                }else{
+                    this.msg = posts.error
+                }
             })
     }
 
     exportar(termo) {
+        if(this.posts.length == 0) {
+            this.msg = 'Não foi encontrado nenhum RSS com esses parametros';
+
+            return;
+        }
+
         window.open('http://localhost:8000/rss/export/' + termo);
     }
     

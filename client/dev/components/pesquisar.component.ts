@@ -42,7 +42,7 @@ export class PesquisarComponent{
                         this.msg = '';
                     } else {
                         this.posts = []
-                        this.msg = 'Não foi encontrado nem um RSS com esses parametros'
+                        this.msg = 'Não foi encontrado nenhum RSS com esses parametros'
                     }
                 }else{
                     this.msg = posts.error
