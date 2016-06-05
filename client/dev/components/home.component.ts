@@ -1,7 +1,10 @@
-import { Component } from '@angular/core'
+import { Component,Inject } from '@angular/core'
+import { Http } from '@angular/http'
 import {InsertRssComponent} from "./insert_rss.component";
 import {RssSingleComponent} from "./rss-single.component";
-import {RssService} from "../service/rss.service";
+import 'rxjs/add/operator/toPromise';
+declare var $: any;
+
 @Component({
     template:`
     <div class="col_12">
@@ -17,14 +20,22 @@ import {RssService} from "../service/rss.service";
 export class HomeComponent{
     private posts:Array<any> = [];
 
-    constructor(private _rssService:RssService){
-        for(var i = 0 ; i < 10 ; i++) {
-            this.posts.push({title: 'titulo ' + i, mensagem: 'descricao ' + i})
-        }
-    }
+    constructor(@Inject(Http) private _http:Http){}
+
     ngOnInit(){
-        // var request = this._rssService.filter({titulo:'caso'}).subscribe(res => console.log(res));
-        // request.then(res => console.log(res))
+        let headers = new Headers({
+            'Content-Type': 'application/json'});
+
+        let filter = {titulo:'ameron segue os passos de Wilson'};
+        let body = $.param(filter);
+        console.log(body)
+        this._http.post('http://localhost:8000/rss/filter',body,{headers:headers})
+            .toPromise()
+            .then(res => {
+                let posts = res.json().json
+                console.log(posts)
+                this.posts = posts
+            })
     }
 }
 

@@ -3,8 +3,10 @@ import { Component } from '@angular/core'
     selector: 'rss-single',
     template:`
     <div>
-        <h6>{{ rss.title }}</h6>
-        <p>{{ rss.mensagem }}</p>
+        <h6>{{ rss.titulo }}</h6>
+        <p>{{ rss.gravata }}</p>
+        <p><a href="{{ rss.link }}" target="_blank">Link</a></p>
+        <p>{{ rss.email }}</p>
     </div>
     `,
     inputs:['rss']

@@ -77,6 +77,7 @@ class RssController extends Controller
 			$ilike = ['noticia','titulo','email','link'];
 			foreach ($request->only($campos) as $field => $value) {
 				if(!empty($value)){
+					return in_array($field,$ilike);
 					if(in_array($field,$ilike)){
 						$noticias->where($field,'ilike','%'.$value.'%');
 					}elseif($field == 'data'){
@@ -85,7 +86,7 @@ class RssController extends Controller
 				}
 				
 			}
-			
+
 			return $this->_return(true,'Filtro efetuado',$noticias->get()->toArray());
 		}catch (\Exception $e){
 		    return $this->_return(false,'Erro ao filtrar rss',$e);
