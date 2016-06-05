@@ -38,7 +38,7 @@ Route::group(['prefix'=>'imagem'],function(){
 });
 Route::group(['prefix'=>'rss'],function(){
 	Route::post('import','RssController@import');
-	Route::post('export','RssController@export');
+	Route::get('export/{pesquisa?}','RssController@export');
 	Route::post('filter','RssController@filter');
 	Route::get('validation_xml', function () {
 		return view('schema');

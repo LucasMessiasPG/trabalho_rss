@@ -25,7 +25,7 @@ class RssController extends Controller
 			'portal.email'
 		)
 			->limit(10)
-			->join('portal', 'portal.id_portal', '=', 'noticia.id_noticia')
+			->join('portal', 'portal.id_portal', '=', 'noticia.id_portal')
 			->orderBy('created_at', 'asc')
 			->get();
 
@@ -101,11 +101,59 @@ class RssController extends Controller
 		}
 	}
 	
-	public function export(Request $request)
+	public function export($pesquisa = '', Request $request)
 	{
 		try{
+			$noticias = Noticia::orderBy('data')
+				->join('portal', 'portal.id_portal', '=', 'noticia.id_portal');
+
+			$value = $pesquisa;
+
+			$noticias->where('noticia.titulo','ilike','%'.$value.'%')
+				->orWhere('noticia.conteudo','ilike','%'.$value.'%')
+				->orWhere('noticia.link','ilike','%'.$value.'%');
+
+			/**
+			 * Noticias filtradas
+			 */
+			$noticias = $noticias->get();
+
+			if($noticias->count() == 0) {
+				return $this->_return(false,'Nada a exportar');
+			}
+
+			/**
+			 * Cria um feed
+			 * @var Feed $feed
+			 */
+			$feed = \App::make("feed");
+
+			$feed->title = 'Noticias';
+			$feed->description = 'Noticias: ' . $request->get('pesquisa');
+			$feed->link = url('rss/export/' . $request->get('pesquisa'));
+			$feed->setDateFormat('datetime');
+
+			$feed->pubdate = $noticias[0]->created_at;
+
+			$feed->lang = 'pt';
+			$feed->setShortening(true);
+			$feed->setTextLimit(200);
+
+			foreach ($noticias as $noticia) {
+				$feed->add(
+					$this->tirarAcentos(html_entity_decode($noticia->titulo)),
+					$noticia->email,
+					$noticia->link,
+					$noticia->created_at,
+					$noticia->conteudo
+				);
+			}
+
+			$feed->ctype = "text/xml";
 			
-			// export rss
+			header('Content-Disposition: attachment; filename="noticias.xml"');
+			
+			return $feed->render('rss');
 		            
 		}catch (\Exception $e){
 			return $this->_return(false,'Erro ao exportar rss',$e);
