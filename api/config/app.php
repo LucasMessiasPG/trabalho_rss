@@ -157,6 +157,7 @@ return [
         App\Providers\RouteServiceProvider::class,
 
         willvincent\Feeds\FeedsServiceProvider::class,
+        Roumen\Feed\FeedServiceProvider::class,
     ],
 
     /*
@@ -203,6 +204,7 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Feeds' => willvincent\Feeds\Facades\FeedsFacade::class,
+        'Feed' => Roumen\Feed\Feed::class,
     ],
 
 ];

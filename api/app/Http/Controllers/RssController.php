@@ -5,9 +5,66 @@ namespace App\Http\Controllers;
 use App\Noticia;
 use App\Portal;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Roumen\Feed\Feed;
 
 class RssController extends Controller
 {
+
+	public function ultimasNoticias()
+	{
+		header("Content-type: text/xml");
+
+		/**
+		 * Cria um feed
+		 * @var Feed $feed
+		 */
+		$feed = \App::make("feed");
+
+		/**
+		 * Define uma cache
+		 */
+		$feed->setCache(60);
+		
+		// check if there is cached feed and build new only if is not
+		if (!$feed->isCached())
+		{
+			$noticias = Noticia::select(
+				'noticia.*',
+				'portal.nome_portal',
+				'portal.email'
+			)
+				->limit(10)
+				->join('portal', 'portal.id_portal', '=', 'noticia.id_noticia')
+				->orderBy('created_at', 'asc')
+				->get();
+
+			$feed->title = 'Ultimas Notícias';
+			$feed->description = 'Ultímas notificas geral';
+			$feed->link = url('rss/ultimas_noticias');
+			$feed->setDateFormat('datetime');
+
+			$feed->pubdate = $noticias[0]->created_at;
+
+			$feed->lang = 'pt';
+			$feed->setShortening(true);
+			$feed->setTextLimit(200);
+
+			foreach ($noticias as $noticia) {
+				$feed->add(
+					$noticia->titulo,
+					$noticia->email,
+					$noticia->link,
+					$noticia->created_at,
+					$noticia->conteudo
+				);
+			}
+			
+		}
+		
+		return $feed->render('text/xml');
+	}
+
 	public function import(Request $request)
 	{
 		try{
@@ -98,6 +155,11 @@ class RssController extends Controller
 		}
 	}
 
+	/**
+	 * converte uma data do tipo rss para timestamp
+	 * @param $rss_time
+	 * @return int
+	 */
 	private function rsstotime($rss_time) {
 		$day = substr($rss_time, 5, 2);
 		$month = substr($rss_time, 8, 3);
