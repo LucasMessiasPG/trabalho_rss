@@ -43,4 +43,5 @@ Route::group(['prefix'=>'rss'],function(){
 	Route::get('validation_xml', function () {
 		return view('schema');
 	});
+	Route::get('ultimas_noticias','RssController@ultimasNoticias');
 });

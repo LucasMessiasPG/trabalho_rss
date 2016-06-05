@@ -5,9 +5,56 @@ namespace App\Http\Controllers;
 use App\Noticia;
 use App\Portal;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Roumen\Feed\Feed;
 
 class RssController extends Controller
 {
+
+	public function ultimasNoticias()
+	{
+		/**
+		 * Cria um feed
+		 * @var Feed $feed
+		 */
+		$feed = \App::make("feed");
+
+		$noticias = Noticia::select(
+			'noticia.*',
+			'portal.nome_portal',
+			'portal.email'
+		)
+			->limit(10)
+			->join('portal', 'portal.id_portal', '=', 'noticia.id_noticia')
+			->orderBy('created_at', 'asc')
+			->get();
+
+		$feed->title = 'Ultimas Noticias';
+		$feed->description = 'Ultimas noticias';
+		$feed->link = url('rss/ultimas_noticias');
+		$feed->setDateFormat('datetime');
+
+		$feed->pubdate = $noticias[0]->created_at;
+
+		$feed->lang = 'pt';
+		$feed->setShortening(true);
+		$feed->setTextLimit(200);
+
+		foreach ($noticias as $noticia) {
+			$feed->add(
+				$this->tirarAcentos(html_entity_decode($noticia->titulo)),
+				$noticia->email,
+				$noticia->link,
+				$noticia->created_at,
+				$noticia->conteudo
+			);
+		}
+
+		$feed->ctype = "text/xml";
+		
+		return $feed->render('rss');
+	}
+
 	public function import(Request $request)
 	{
 		try{
@@ -100,7 +147,13 @@ class RssController extends Controller
 		}
 	}
 
-	private function rsstotime($rss_time) {
+	/**
+	 * converte uma data do tipo rss para timestamp
+	 * @param $rss_time
+	 * @return int
+	 */
+	private function rsstotime($rss_time)
+	{
 		$day = substr($rss_time, 5, 2);
 		$month = substr($rss_time, 8, 3);
 		$month = date('m', strtotime("$month 1 2011"));
@@ -129,5 +182,27 @@ class RssController extends Controller
 		}
 
 		return $timestamp;
+	}
+
+	/**
+	 * converte para CDATA
+	 * @param string $text
+	 * @deprecated A biblioteca não aceita
+	 * @return string
+	 */
+	private function cdata($text = '')
+	{
+		return '<![CDATA[' . $text . ']]>';
+	}
+
+	/**
+	 * Bibioteca está com problema com acentos
+	 * @param $string
+	 * @return mixed
+	 */
+	private function tirarAcentos($string){
+		$string = preg_match("/\"/", '', $string);
+
+		return preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/"),explode(" ","a A e E i I o O u U n N"),$string);
 	}
 }
