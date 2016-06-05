@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<rss version="2.0" xmlns="http://localhost/trabalho_rss/api/public/rss/validation_xml">
+    <channel>
+        <title>Teste XML</title>
+        <link>http://link.com/teste/</link>
+        <description>Últimas Notícias</description>
+        <item>
+            <title>
+                <![CDATA[
+Novidade
+]]>
+            </title>
+            <link>
+                http://link.com/teste.htm
+            </link>
+            <description>
+                <![CDATA[
+Este é um teste de xml
+]]>
+            </description>
+            <pubDate>Dom, 05 Jun 2016 00:35:00 -0300</pubDate>
+        </item>
+    </channel>
+</rss>
