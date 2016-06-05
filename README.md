@@ -32,14 +32,14 @@
     </pre>
     </li>
     <li>
-    <p>Eexecute este comando (caso nao possua composer <a href="https://getcomposer.org/">click aqui</a></p>
+    <p>Eexecute este comando (caso nao possua composer <a href="https://getcomposer.org/">click aqui</a>)</p>
     <pre>
         $cd /path/to/api
         $composer install
     </pre>
    </li>
    <li>
-   <p>Dentro da pasta 'cliente' execute os seguintes comandos (é necessario tem node instalado para instalar <a href="https://nodejs.org/en/">click aqui</a>)</p>
+   <p>Dentro da pasta 'client' execute os seguintes comandos (é necessario ter o node instalado. Para instalar <a href="https://nodejs.org/en/">click aqui</a>)</p>
    <pre>
         $cd /path/to/client
         $npm install
