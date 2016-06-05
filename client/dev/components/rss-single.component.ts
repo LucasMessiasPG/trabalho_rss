@@ -19,6 +19,7 @@ declare var $: any;
         <div *ngIf="(rss.comentario && rss.comentario == true)">
             <ul>
                 <li *ngFor="let com of comentarios">
+                    <img *ngIf="com.imgaem" src="{{ com.imgaem }}" alt="">           
                     <p>{{ com.email }} - {{ com.created_at }}</p>           
                     <p>{{ com.comentario }}</p>
                 </li>
