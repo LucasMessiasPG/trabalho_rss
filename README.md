@@ -61,6 +61,14 @@
    </li>
 </ol>
 
+## WebService
+
+<ol>
+    <li>Após o iniciar o server</li>
+    <pre>
+        http://localhost:8000
+    </pre>
+</ol>
 
 ## Licence
 
