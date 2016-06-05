@@ -29,8 +29,8 @@ class RssController extends Controller
 			->orderBy('created_at', 'asc')
 			->get();
 
-		$feed->title = $this->cdata('Ultimas Notícias');
-		$feed->description = $this->cdata('Ultímas notificas geral');
+		$feed->title = 'Ultimas Noticias';
+		$feed->description = 'Ultimas noticias';
 		$feed->link = url('rss/ultimas_noticias');
 		$feed->setDateFormat('datetime');
 
@@ -42,11 +42,11 @@ class RssController extends Controller
 
 		foreach ($noticias as $noticia) {
 			$feed->add(
-				$this->cdata($noticia->titulo),
+				$this->tirarAcentos(html_entity_decode($noticia->titulo)),
 				$noticia->email,
 				$noticia->link,
 				$noticia->created_at,
-				$this->cdata($noticia->conteudo)
+				$noticia->conteudo
 			);
 		}
 
@@ -182,8 +182,25 @@ class RssController extends Controller
 		return $timestamp;
 	}
 
+	/**
+	 * converte para CDATA
+	 * @param string $text
+	 * @deprecated A biblioteca não aceita
+	 * @return string
+	 */
 	private function cdata($text = '')
 	{
 		return '<![CDATA[' . $text . ']]>';
+	}
+
+	/**
+	 * Bibioteca está com problema com acentos
+	 * @param $string
+	 * @return mixed
+	 */
+	private function tirarAcentos($string){
+		$string = preg_match("/\"/", '', $string);
+
+		return preg_replace(array("/(á|à|ã|â|ä)/","/(Á|À|Ã|Â|Ä)/","/(é|è|ê|ë)/","/(É|È|Ê|Ë)/","/(í|ì|î|ï)/","/(Í|Ì|Î|Ï)/","/(ó|ò|õ|ô|ö)/","/(Ó|Ò|Õ|Ô|Ö)/","/(ú|ù|û|ü)/","/(Ú|Ù|Û|Ü)/","/(ñ)/","/(Ñ)/"),explode(" ","a A e E i I o O u U n N"),$string);
 	}
 }
