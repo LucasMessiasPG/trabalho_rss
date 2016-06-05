@@ -64,7 +64,7 @@
 ## WebService
 
 <ol>
-    <li>Após o iniciar o server</li>
+    <li>Para ver a documentação... Após o iniciar o server</li>
     <pre>
         http://localhost:8000
     </pre>
