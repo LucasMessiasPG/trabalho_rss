@@ -30,7 +30,7 @@ import {FILE_UPLOAD_DIRECTIVES, FileUploader} from 'ng2-file-upload/ng2-file-upl
     directives:[FILE_UPLOAD_DIRECTIVES]
 })
 export class UploadComponent{
-    private _url = 'http://192.168.0.117:8000/upload';
+    private _url = 'http://localhost:8000/rss/import';
     public uploader:FileUploader = new FileUploader({url:this._url});
 
     enviar(item){

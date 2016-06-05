@@ -12,34 +12,39 @@ class RssController extends Controller
 	{
 		try{
 			/**
-			 * @var \SimplePie $feed
+			 * @var \Symfony\Component\HttpFoundation\File\UploadedFile|array|null File$arquivo
 			 */
-			$feed = \Feeds::make($request->get('url_xml'));
-			
-			//todos os itens
-			$items = $feed->get_items();
-			
+			$arquivo = $request->file('file');
+
+			if(!preg_match('/xml/', $arquivo->getMimeType()))
+				return $this->_return(false, "arquivo inválido");
+
+			$feed = simplexml_load_file($arquivo);
+
 			/**
 			 * @var Portal $portal
 			 */
 			$portal = Portal::firstOrCreate([
-				'nome_portal' => $feed->get_title(),
-				'site' => $feed->get_link(),
-				'email' => $feed->get_author()
+				'nome_portal' => $feed->channel->title,
+				'site' => $feed->channel->link,
+				'email' => $feed->channel->author
 				]);
-			
+
+
+			$items = $feed->channel->item;
+
 			/**
 			 * todos os itens do rss
-			 * @var \SimplePie_Item $item
+			 * @var \SimpleXMLElement $item
 			 */
 			foreach ($items as $item) {
 				Noticia::create([
-					'titulo' => $item->get_title(),
+					'titulo' => trim($item->title),
 					'id_portal' => $portal->id_portal,
-					'conteudo' => substr($item->get_description(), 0, 255),
-					'gravata' => substr($item->get_description(), 0, 200),
-					'link' => $item->get_link(),
-					'data' => $item->get_date('Y-m-d')
+					'conteudo' => substr(trim($item->description), 0, 255),
+					'gravata' => substr(trim($item->description), 0, 200),
+					'link' => $item->link,
+					'data' => date('Y-m-d', $this->rsstotime($item->pubDate))
 				]);
 			}
 
@@ -91,5 +96,36 @@ class RssController extends Controller
 		}catch (\Exception $e){
 		    return $this->_return(false,'Erro ao filtrar rss',$e);
 		}
+	}
+
+	private function rsstotime($rss_time) {
+		$day = substr($rss_time, 5, 2);
+		$month = substr($rss_time, 8, 3);
+		$month = date('m', strtotime("$month 1 2011"));
+		$year = substr($rss_time, 12, 4);
+		$hour = substr($rss_time, 17, 2);
+		$min = substr($rss_time, 20, 2);
+		$second = substr($rss_time, 23, 2);
+		$timezone = substr($rss_time, 26);
+
+		$timestamp = mktime($hour, $min, $second, $month, $day, $year);
+
+		date_default_timezone_set('UTC');
+
+		if(is_numeric($timezone)) {
+			$hours_mod = $mins_mod = 0;
+			$modifier = substr($timezone, 0, 1);
+			$hours_mod = (int) substr($timezone, 1, 2);
+			$mins_mod = (int) substr($timezone, 3, 2);
+			$hour_label = $hours_mod>1 ? 'hours' : 'hour';
+			$strtotimearg = $modifier.$hours_mod.' '.$hour_label;
+			if($mins_mod) {
+				$mins_label = $mins_mod>1 ? 'minutes' : 'minute';
+				$strtotimearg .= ' '.$mins_mod.' '.$mins_label;
+			}
+			$timestamp = strtotime($strtotimearg, $timestamp);
+		}
+
+		return $timestamp;
 	}
 }
