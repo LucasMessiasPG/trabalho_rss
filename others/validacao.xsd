@@ -5,22 +5,32 @@
       <xs:sequence>
         <xs:element name="channel" minOccurs="1" maxOccurs="1">
           <xs:complexType>
-            <xs:sequence>
+            <xs:choice maxOccurs="unbounded">
               <xs:element name="title"></xs:element>
-              <xs:element name="link"></xs:element>
+              <xs:element name="link" type="xs:string"></xs:element>
               <xs:element name="description"></xs:element>
-              <xs:element name="item" minOccurs="1" maxOccurs="unbounded">
+
+              <xs:element name="image" minOccurs="0" maxOccurs="unbounded">
                 <xs:complexType>
-                  <xs:sequence>
-                    <xs:element name="title" type="xs:string"></xs:element>
-                    <xs:element name="link" type="xs:anyURI"></xs:element>
-                    <xs:element name="description" type="xs:string"></xs:element>
-                    <xs:element name="pubDate" type="xs:string"></xs:element>
-                  </xs:sequence>
+                  <xs:choice maxOccurs="unbounded">
+                    <xs:element name="title"></xs:element>
+                    <xs:element name="url"></xs:element>
+                    <xs:element name="link"></xs:element>
+                  </xs:choice>
                 </xs:complexType>
               </xs:element>
 
-            </xs:sequence>
+              <xs:element name="item" minOccurs="1" maxOccurs="unbounded">
+                <xs:complexType>
+                  <xs:choice maxOccurs="unbounded">
+                    <xs:element name="title" type="xs:string"></xs:element>
+                    <xs:element name="description" type="xs:string"></xs:element>
+                    <xs:element name="link" type="xs:anyURI"></xs:element>
+                    <xs:element name="pubDate" type="xs:string"></xs:element>
+                  </xs:choice>
+                </xs:complexType>
+              </xs:element>
+            </xs:choice>
           </xs:complexType>
         </xs:element>
       </xs:sequence>

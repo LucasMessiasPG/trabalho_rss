@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Imagem;
 use App\Noticia;
 use App\Portal;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Roumen\Feed\Feed;
 
 class RssController extends Controller
@@ -95,13 +95,22 @@ class RssController extends Controller
 			 * @var \SimpleXMLElement $item
 			 */
 			foreach ($items as $item) {
-				Noticia::create([
+				$noticia = Noticia::create([
 					'titulo' => trim($item->title),
 					'id_portal' => $portal->id_portal,
 					'conteudo' => substr(trim($item->description), 0, 255),
 					'gravata' => substr(trim($item->description), 0, 200),
 					'link' => $item->link,
 					'data' => date('Y-m-d', $this->rsstotime($item->pubDate))
+				]);
+
+				/**
+				 * Insere a imagem da noticia
+				 */
+				Imagem::create([
+					'id_noticia' => $noticia->id_noticia,
+					'imagem' => $feed->channel->image->url,
+					'destaque' => true
 				]);
 			}
 
